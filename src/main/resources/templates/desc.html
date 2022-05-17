@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Page-Enter" content="revealTrans(Duration=5.0,Transition=5)">
+    <title>x</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #wrap {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            outline: none;
+            -moz-outline-style: none;
+        }
+
+        html,body {
+            /*height: 100%;*/
+            /*overflow:hidden;*/
+            background: url("/static/images/background.gif") no-repeat;
+            background-size: cover;
+            min-height: 100vh;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        .fixedbutton {
+            position: fixed;
+            bottom: 60px;
+            right: 50px;
+            z-index: 100;
+        }
+
+        .img{
+            /*max-width: 100%;*/
+            /*height: 100%;*/
+        }
+
+    </style>
+
+</head>
+<body>
+<!--    <div class="head"></div>-->
+    <div id="wrap" >
+        <img class="img" src="/static/images/60.png">
+        <a href="javascript:history.go(-1)">
+            <img src="/static/images/back.png" class="fixedbutton">
+        </a>
+    </div>
+</body>
+<script type="text/javascript">
+    document.oncontextmenu = function(){
+        event.returnValue = false;
+    }// 或者直接返回整个事件
+    document.oncontextmenu = function(){
+        return false;
+    }
+    document.onselectstart = function(){
+        event.returnValue = false;
+    }// 或者直接返回整个事件
+    document.onselectstart = function(){
+        return false;
+    }
+    document.oncopy = function(){
+        event.returnValue = false;
+    }// 或者直接返回整个事件
+    document.oncopy = function(){
+        return false;
+    }
+</script>
+</html>

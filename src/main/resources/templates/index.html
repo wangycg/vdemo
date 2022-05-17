@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no">
+<!--    width=device-width,maximum-scale=1.0,initial-scale=1-->
+    <title>x</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #wrap {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        a {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            outline: none;-moz-outline-style: none;
+        }
+
+        html,body {
+            height: 100%;
+            overflow:hidden;
+            background: url("/static/images/background.gif") no-repeat;
+            background-size: cover;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        .head{
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            /*z-index: 1000;*/
+            background: url("/static/images/index_head.png") no-repeat;
+            background-size: cover;
+        }
+
+    </style>
+<!--    <script src="/static/js/jquery-3.6.0.min.js" type="text/javascript"></script>-->
+<!--    <script src="/static/js/jquery.backstretch.min.js" type="text/javascript"></script>-->
+</head>
+<body>
+    <div class="head"></div>
+    <div id="wrap" class="bg1"></div>
+</body>
+<script type="text/javascript">
+
+    document.oncontextmenu = function(){
+        event.returnValue = false;
+    }// 或者直接返回整个事件
+    document.oncontextmenu = function(){
+        return false;
+    }
+    document.onselectstart = function(){
+        event.returnValue = false;
+    }// 或者直接返回整个事件
+    document.onselectstart = function(){
+        return false;
+    }
+    document.oncopy = function(){
+        event.returnValue = false;
+    }// 或者直接返回整个事件
+    document.oncopy = function(){
+        return false;
+    }
+
+
+    function randomNum(m, n) {
+        return Math.floor(Math.random() * (n - m + 1) + m);
+    }
+    // function randomColor() {
+    //     var r = randomNum(0, 255);
+    //     var g = randomNum(0, 255);
+    //     var b = randomNum(0, 255);
+    //     return "rgb(" + r + "," + g + "," + b + ")";
+    // }
+    var wrapp = document.getElementById("wrap");
+    var balls = [];
+
+    function createBalls() {
+        for (var i = 1; i <= 8; i++) {
+            var ball = document.createElement("a");
+            ball.href = "/getDesc?id=" + i;
+            var myImage = document.createElement("img");
+            myImage.src = '/static/images/index/0'+ i +'.png';
+            myImage.width = 200;
+            ball.appendChild(myImage);
+
+            //随机小球起始的X坐标和小球的Y坐标
+            ball.x = randomNum(0, window.innerWidth);
+            ball.y = randomNum(window.innerHeight / 2, window.innerHeight);
+            // ball.y = randomNum(0, window.innerHeight / 2);
+            //随机小球的移动速度
+            ball.speed = 0.3;
+            //随机小球移动的方向
+            if (Math.random() - 0.5 > 0) {
+                ball.xflag = true;
+            } else {
+                ball.xflag = false;
+            }
+
+            if (Math.random() - 0.5 > 0) {
+                ball.yflag = true;
+            } else {
+                ball.yflag = false;
+            }
+
+            //随机小球的背景颜色
+            // ball.style.backgroundColor = randomColor();
+            // ball.innerHTML = i + 1;r
+            //将小球插入当wrapp中
+            wrapp.appendChild(ball);
+            //将所有的小球存储到数组中
+            balls.push(ball);
+        }
+    }
+    createBalls();
+    //小球移动函数，判断小球的位置
+    function moveBalls(ballObj) {
+        setInterval(function () {
+            ballObj.style.top = ballObj.y + "px";
+            ballObj.style.left = ballObj.x + "px";
+            //判断小球的标志量，对小球作出相应操作
+            if (ballObj.yflag) {
+                //小球向下移动
+                ballObj.y += ballObj.speed;
+                if (ballObj.y >= window.innerHeight - ballObj.offsetWidth) {
+                    ballObj.y = window.innerHeight - ballObj.offsetWidth;
+                    ballObj.yflag = false;
+                }
+            } else {
+                //小球向上移动
+                ballObj.y -= ballObj.speed;
+                if (ballObj.y <= window.innerHeight / 3.5) {
+                // if (ballObj.y <= 0) {
+                    ballObj.y = window.innerHeight / 3.5;
+                    // ballObj.y = 0;
+                    ballObj.yflag = true;
+                }
+            }
+            if (ballObj.xflag) {
+                //小球向右移动
+                ballObj.x += ballObj.speed;
+                if (ballObj.x >= window.innerWidth - ballObj.offsetHeight) {
+                    ballObj.x = window.innerWidth - ballObj.offsetHeight;
+                    ballObj.xflag = false;
+                }
+            } else {
+                //小球向左移动
+                ballObj.x -= ballObj.speed;
+                if (ballObj.x <= 0) {
+                    ballObj.x = 0;
+                    ballObj.xflag = true;
+                }
+            }
+            crash(ballObj);
+        }, 1);
+    }
+    var x1, y1, x2, y2;
+    //碰撞函数
+    function crash(ballObj) {
+        //通过传过来的小球对象来获取小球的X坐标和Y坐标
+        x1 = ballObj.x;
+        y1 = ballObj.y;
+        for (var i = 0; i < balls.length; i++) {
+            //确保不和自己对比
+            if (ballObj != balls[i]) {
+                x2 = balls[i].x;
+                y2 = balls[i].y;
+                //判断位置的平方和小球的圆心坐标的关系
+                // Math.pow(ballObj.offsetWidth + balls[i].offsetWidth, 2)
+                if (Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) <= Math.pow(ballObj.offsetWidth - 20, 2)) {
+                    //判断传过来的小球对象，相对于碰撞小球的哪个方位
+                    if (ballObj.x < balls[i].x) {
+                        if (ballObj.y < balls[i].y) {
+                            //小球对象在被碰小球的左上角
+                            ballObj.yflag = false;
+                            ballObj.xflag = false;
+                        } else if (ballObj.y > balls[i].y) {
+                            //小球对象在被碰小球的左下角
+                            ballObj.xflag = false;
+                            ballObj.yflag = true;
+                        } else {
+                            //小球对象在被撞小球的正左方
+                            ballObj.xflag = false;
+                        }
+                    } else if (ballObj.x > balls[i].x) {
+                        if (ballObj.y < balls[i].y) {
+                            //小球对象在被碰撞小球的右上方
+                            ballObj.yflag = false;
+                            ballObj.xflag = true;
+                        } else if (ballObj.y > balls[i].y) {
+                            //小球对象在被碰撞小球的右下方
+                            ballObj.xflag = true;
+                            ballObj.yflag = true;
+                        } else {
+                            //小球对象在被撞小球的正右方
+                            ballObj.xflag = true;
+                        }
+                    } else if (ballObj.y > balls[i].y) {
+                        //小球对象在被撞小球的正下方
+                        ballObj.yflag = true;
+                    } else if (ballObj.y < balls[i].y) {
+                        //小球对象在被撞小球的正上方
+                        ballObj.yflag = false;
+                    }
+                }
+            }
+        }
+    }
+    for (var i = 0; i < balls.length; i++) {
+        //将所有的小球传到函数中,来实现对小球的移动
+        moveBalls(balls[i]);
+    }
+
+    // Number.prototype.padLeft = function(total, pad) {
+    //     return (Array(total).join(pad || 0) + this).slice(-total);
+    // }
+
+    // imgs = [];
+    //
+    // for(var i = 0; i < 106; i++){
+    //     imgs.push("/static/images/background/" + i.padLeft(3) + ".png")
+    // }
+    //
+    // $.backstretch(imgs, {
+    //     fade : 500, // 动画时长
+    //     duration : 500 // 切换延时
+    // });
+</script>
+</html>
