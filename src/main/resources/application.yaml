@@ -22,16 +22,16 @@ spring:
     # 要被排除在解析之外的视图名称列表，⽤逗号分隔
     excluded-view-names:
     # 要运⽤于模板之上的模板模式。另⻅ StandardTemplate-ModeHandlers( 默认值： HTML5)
-    mode: HTML5
+    mode: HTML
     # 在构建 URL 时添加到视图名称前的前缀（默认值： classpath:/templates/ ）
     prefix: classpath:/templates/
     # 在构建 URL 时添加到视图名称后的后缀（默认值： .html ）
     suffix: .html
 
-  devtools:
-    restart:
-      enabled: true
+#  devtools:
+#    restart:
+#      enabled: true
 # 应用服务 WEB 访问端口
 server:
-  port: 8080
+  port: 80
 
